@@ -1,7 +1,7 @@
 {
 	"name": "mjolnir/librarian",
 	"version": "0.0",
-	"description": "Mjolnir librarian (ie. documentation) module",
+	"description": "Mjolnir librarian module",
 	"keywords": ["library"],
 	"homepage": "https://github.com/ibidem",
 	"type": "library",
