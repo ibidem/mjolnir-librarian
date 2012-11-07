@@ -46,7 +46,7 @@ class Task_Librarian extends \app\Task
 				}
 			});
 
-		$manual
+		$manual_intro
 			= "<!DOCTYPE html>\n<html>\n"
 			. "<head>\n\t<meta charset=\"UTF-8\"/>\n\t<title>Manual</title>\n"
 			. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
@@ -55,12 +55,24 @@ class Task_Librarian extends \app\Task
 			. "\t</style>\n"
 			. "</head>\n\n"
 			. "<body>\n"
+			. "<h1 class=\"nobreak\">Manual<h1>"
 			;
+
+		// build table of contents
+		$TOC = "<h2>Table of Contents</h2>\n<ul class=\"toc\">";
+		$toc_book_idx = 0;
+
+		$manual = '';
 
 		foreach ($books as $book_key => $book)
 		{
+			// TOC entry
+			$toc_section_idx = 0;
+			$toc_book_idx++;
+			$TOC .= "<li>{$toc_book_idx}. <a href=\"#{$book_key}\" class=\"toc-book\">{$book['title']}</a></li>";
+
 			// create cover
-			$manual .= "<h1>{$book['title']}</h1>\n\n";
+			$manual .= "<h1 id=\"{$book_key}\">{$book['title']}</h1>\n\n";
 
 			// sort sections
 			\uasort($book['sections'], function ($a, $b)
@@ -81,7 +93,12 @@ class Task_Librarian extends \app\Task
 
 			foreach ($book['sections'] as $section_key => $section)
 			{
-				$manual .= "<h2>{$section['title']}</h2>\n\n";
+				// TOC entry
+				$toc_chapter_idx = 0;
+				$toc_section_idx++;
+				$TOC .= "<li>{$toc_book_idx}.{$toc_section_idx} <a href=\"#{$book_key}_{$section_key}\" class=\"toc-section\">{$section['title']}</a></li>";
+
+				$manual .= "<h2 id=\"{$book_key}_{$section_key}\">{$toc_book_idx}.{$toc_section_idx} {$section['title']}</h2>\n\n";
 
 				// insert introduction
 				$manual .= $this->parse_component
@@ -109,30 +126,53 @@ class Task_Librarian extends \app\Task
 
 				foreach ($section['chapters'] as $chapter_key => $chapter)
 				{
+					// TOC entry
+					$toc_chapter_idx++;
+					$TOC .= "<li>{$toc_book_idx}.{$toc_section_idx}.{$toc_chapter_idx} <a href=\"#{$book_key}_{$section_key}_{$chapter_key}\" class=\"toc-chapter\">{$chapter['title']}</a></li>";
+
+					$title = "<h3 id=\"{$book_key}_{$section_key}_{$chapter_key}\">{$toc_book_idx}.{$toc_section_idx}.{$toc_chapter_idx} {$chapter['title']}</h3>\n\n";
+
 					$manual .= $this->parse_component
 						(
 							$chapter,
-							$section['namespace']
+							$section['namespace'],
+							$title
 						);
 				}
 			}
 		}
 
-		$manual .= '</body></html>';
+		$TOC .= "</ul>\n";
+
+		$manual_outro = '</body></html>';
+
+		$manual = $manual_intro.$TOC.$manual.$manual_outro;
+
+		$this->writer
+			->write(' Generating HTML manual... ');
 
 		// generate html docs
 		\file_put_contents(DOCROOT.'manual.html', $manual);
 
+		$this->writer
+			->write('done.')
+			->eol();
+
+		$this->writer
+			->write(' Generating PDF manual... ');
+
 		// generate pdf docs
 		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::from_html($manual));
 
-		$this->writer->write(' Manual created.');
+		$this->writer
+			->write('done.')
+			->eol();
 	}
 
 	/**
 	 * @return string html contents of the specified component
 	 */
-	protected function parse_component(array $component, $namespace)
+	protected function parse_component(array $component, $namespace, $title = null)
 	{
 		if (isset($component['namespace']))
 		{
@@ -141,9 +181,9 @@ class Task_Librarian extends \app\Task
 
 		$html = '';
 
-		if (isset($component['title']))
+		if ($title !== null)
 		{
-			$html .= "<h3>{$component['title']}</h3>\n\n";
+			$html .= $title;
 		}
 
 		// find file
