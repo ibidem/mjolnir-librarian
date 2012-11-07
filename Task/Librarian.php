@@ -55,7 +55,7 @@ class Task_Librarian extends \app\Task
 			. "\t</style>\n"
 			. "</head>\n\n"
 			. "<body>\n"
-			. "<h1 class=\"nobreak\">Manual<h1>"
+			. "<h1 class=\"nobreak\">Manual</h1>"
 			;
 
 		// build table of contents
