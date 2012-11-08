@@ -46,20 +46,30 @@ class Task_Librarian extends \app\Task
 				}
 			});
 
-		$manual_intro
+		$manual_pdf_intro
 			= "<!DOCTYPE html>\n<html>\n"
 			. "<head>\n\t<meta charset=\"UTF-8\"/>\n\t<title>Manual</title>\n"
 			. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
 			. "\t<style type=\"text/css\">\n"
-			. \app\View::instance('mjolnir/librarian/style')->render()
+			. \app\View::instance('mjolnir/librarian/pdf-style', '.css')->render()
 			. "\t</style>\n"
 			. "</head>\n\n"
 			. "<body>\n"
-			. "<h1 class=\"nobreak\">Manual</h1>"
+			;
+
+		$manual_html_intro
+			= "<!DOCTYPE html>\n<html>\n"
+			. "<head>\n\t<meta charset=\"UTF-8\"/>\n\t<title>Manual</title>\n"
+			. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
+			. "\t<style type=\"text/css\">\n"
+			. \app\View::instance('mjolnir/librarian/html-style', '.css')->render()
+			. "\t</style>\n"
+			. "</head>\n\n"
+			. "<body>\n"
 			;
 
 		// build table of contents
-		$TOC = "<h2>Table of Contents</h2>\n<ul class=\"toc\">";
+		$TOC = "<h2 class=\"nobreak\"><a name=\"toc\">Table of Contents</a></h2>\n<ul class=\"toc\">";
 		$toc_book_idx = 0;
 
 		$manual = '';
@@ -72,7 +82,15 @@ class Task_Librarian extends \app\Task
 			$TOC .= "<li>{$toc_book_idx}. <a href=\"#{$book_key}\" class=\"toc-book\">{$book['title']}</a></li>";
 
 			// create cover
-			$manual .= "<h1 id=\"{$book_key}\">{$book['title']}</h1>\n\n";
+			$manual .= "<h1><a name=\"{$book_key}\">{$book['title']}</a></h1>\n\n";
+			$manual .= "<div class=\"titlequote\">{$book['quote']}</div>\n";
+			if ( ! empty($book['cover']))
+			{
+				$manual .= "<center><img class=\"cover\" src=\"{$book['cover']}\"/></center>";
+			}
+
+			// introduction notes
+			$manual .= '<div class="pagebreak">'.$this->parse_component($book['introduction']).'</div>';
 
 			// sort sections
 			\uasort($book['sections'], function ($a, $b)
@@ -98,7 +116,7 @@ class Task_Librarian extends \app\Task
 				$toc_section_idx++;
 				$TOC .= "<li>{$toc_book_idx}.{$toc_section_idx} <a href=\"#{$book_key}_{$section_key}\" class=\"toc-section\">{$section['title']}</a></li>";
 
-				$manual .= "<h2 id=\"{$book_key}_{$section_key}\">{$toc_book_idx}.{$toc_section_idx} {$section['title']}</h2>\n\n";
+				$manual .= "<h2><a class=\"toclink\" href=\"#toc\">{$toc_book_idx}.{$toc_section_idx}</a> <a name=\"{$book_key}_{$section_key}\">{$section['title']}</a></h2>\n\n";
 
 				// insert introduction
 				$manual .= $this->parse_component
@@ -130,7 +148,7 @@ class Task_Librarian extends \app\Task
 					$toc_chapter_idx++;
 					$TOC .= "<li>{$toc_book_idx}.{$toc_section_idx}.{$toc_chapter_idx} <a href=\"#{$book_key}_{$section_key}_{$chapter_key}\" class=\"toc-chapter\">{$chapter['title']}</a></li>";
 
-					$title = "<h3 id=\"{$book_key}_{$section_key}_{$chapter_key}\">{$toc_book_idx}.{$toc_section_idx}.{$toc_chapter_idx} {$chapter['title']}</h3>\n\n";
+					$title = "<h3><a class=\"toclink\" href=\"#toc\">{$toc_book_idx}.{$toc_section_idx}.{$toc_chapter_idx}</a> <a name=\"{$book_key}_{$section_key}_{$chapter_key}\">{$chapter['title']}</a></h3>\n\n";
 
 					$manual .= $this->parse_component
 						(
@@ -146,23 +164,25 @@ class Task_Librarian extends \app\Task
 
 		$manual_outro = '</body></html>';
 
-		$manual = $manual_intro.$TOC.$manual.$manual_outro;
+		$manual_out = $manual_html_intro.$TOC.$manual.$manual_outro;
 
 		$this->writer
 			->write(' Generating HTML manual... ');
 
 		// generate html docs
-		\file_put_contents(DOCROOT.'manual.html', $manual);
+		\file_put_contents(DOCROOT.'manual.html', $manual_out);
 
 		$this->writer
 			->write('done.')
 			->eol();
 
+		$manual_out = $manual_pdf_intro.$TOC.$manual.$manual_outro;
+
 		$this->writer
 			->write(' Generating PDF manual... ');
 
 		// generate pdf docs
-		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::from_html($manual));
+		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::from_html($manual_out));
 
 		$this->writer
 			->write('done.')
@@ -172,11 +192,18 @@ class Task_Librarian extends \app\Task
 	/**
 	 * @return string html contents of the specified component
 	 */
-	protected function parse_component(array $component, $namespace, $title = null)
+	protected function parse_component(array $component, $namespace = null, $title = null)
 	{
 		if (isset($component['namespace']))
 		{
 			$namespace = $component['namespace'];
+		}
+		else # no component namespace
+		{
+			if ($namespace === null)
+			{
+				return "<p>Failed to compute component, missing namespace.</p>\n\n";
+			}
 		}
 
 		$html = '';
@@ -198,12 +225,12 @@ class Task_Librarian extends \app\Task
 			}
 			else # unknown
 			{
-				$html = "<p>Failed to compute chapter, unknown type: {$component['type']}</p>\n\n";
+				$html = "<p>Failed to compute component, unknown type: {$component['type']}</p>\n\n";
 			}
 		}
 		else # file not found
 		{
-			$html = "<p>Failed to compute chapter, missing file: $file</p>\n\n";
+			$html = "<p>Failed to compute component, missing file: $file</p>\n\n";
 		}
 
 		$html .= "<br class=\"pagebreak\"/>\n\n";
