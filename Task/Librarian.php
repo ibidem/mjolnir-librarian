@@ -48,8 +48,9 @@ class Task_Librarian extends \app\Task
 
 		$manual_pdf_intro
 			= "<!DOCTYPE html>\n<html>\n"
-			. "<head>\n\t<meta charset=\"UTF-8\"/>\n\t<title>Manual</title>\n"
-			. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
+			. "<head>\n"
+			. "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n"
+			. "\t<title>Manual</title>\n"
 			. "\t<style type=\"text/css\">\n"
 			. \app\View::instance('mjolnir/librarian/pdf-style', '.css')->render()
 			. "\t</style>\n"
@@ -59,8 +60,9 @@ class Task_Librarian extends \app\Task
 
 		$manual_html_intro
 			= "<!DOCTYPE html>\n<html>\n"
-			. "<head>\n\t<meta charset=\"UTF-8\"/>\n\t<title>Manual</title>\n"
-			. "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>"
+			. "<head>\n"
+			. "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n"
+			. "\t<title>Manual</title>\n"
 			. "\t<style type=\"text/css\">\n"
 			. \app\View::instance('mjolnir/librarian/html-style', '.css')->render()
 			. "\t</style>\n"
@@ -124,6 +126,11 @@ class Task_Librarian extends \app\Task
 						$section['introduction'],
 						$section['namespace']
 					);
+
+				// introductions rarely have enough content and cause bad page
+				// breaks so we fix this by placing a page break imediatly
+				// after it
+				$manual .= '<div class="pagebreak"></div>';
 
 				// sort chapters
 				\uasort($section['chapters'], function ($a, $b)

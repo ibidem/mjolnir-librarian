@@ -1,8 +1,12 @@
 body {
 	font-family: DejaVuSerif;
-	font-size: 14pt;
+	font-size: 12pt;
 	line-height: 1.4;
 	vertical-align: baseline;
+}
+
+.toc {
+	list-style-type: none;
 }
 
 .toc a {
