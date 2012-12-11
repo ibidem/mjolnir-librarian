@@ -23,5 +23,13 @@ class PDF
 
 		return $dompdf->output();
 	}
+	
+	static function stream($html, $filename)
+	{
+		$dompdf = new \DOMPDF();
+		$dompdf->load_html($html);
+		$dompdf->render();
+		$dompdf->stream($filename, ['Attachment' => 0]);
+	}
 
 } # class
