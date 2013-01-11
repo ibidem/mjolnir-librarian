@@ -9,7 +9,7 @@ require_once \app\CFS::dir('vendor/phpwkhtmltopdf').'WkHtmlToPdf.php';
  * @copyright  (c) 2012, Ibidem Team
  * @license    https://github.com/ibidem/ibidem/blob/master/LICENSE.md
  */
-class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\PDFDriver
+class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\PDFWriter
 {
 	/**
 	 * @return string pdf
