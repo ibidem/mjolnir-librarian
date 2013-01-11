@@ -1,7 +1,5 @@
 <?php namespace mjolnir\librarian;
 
-require_once \app\CFS::dir('vendor/dompdf').'dompdf_config.inc.php';
-
 /**
  * @package    mjolnir
  * @category   Librarian
@@ -16,20 +14,26 @@ class PDF
 	 */
 	static function from_html($html)
 	{
-		$dompdf = new \DOMPDF();
-		$dompdf->load_html($html);
-
-		$dompdf->render();
-
-		return $dompdf->output();
+		$driver = static::driver();
+		return $driver->from_html($html);
 	}
 	
+	/**
+	 * Stream pdf to client.
+	 */
 	static function stream($html, $filename)
 	{
-		$dompdf = new \DOMPDF();
-		$dompdf->load_html($html);
-		$dompdf->render();
-		$dompdf->stream($filename, ['Attachment' => 0]);
+		$driver = static::driver();
+		$driver->stream($html, $filename);
 	}
 
+	/**
+	 * @return \mjolnir\types\PDFDriver
+	 */
+	protected static function driver()
+	{
+		$driver = '\app\Driver_'.\ucfirst(\strtolower(\app\CFS::config('mjolnir/pdf')['driver']));
+		return $driver::instance();
+	}
+	
 } # class
