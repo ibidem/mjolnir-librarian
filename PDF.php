@@ -12,12 +12,12 @@ class PDF
 	/**
 	 * @return string pdf
 	 */
-	static function from_html($html)
+	static function fromhtml($html)
 	{
 		$driver = static::driver();
 		return $driver->from_html($html);
 	}
-	
+
 	/**
 	 * Stream pdf to client.
 	 */
@@ -35,5 +35,5 @@ class PDF
 		$driver = '\app\Driver_'.\ucfirst(\strtolower(\app\CFS::config('mjolnir/pdf')['driver']));
 		return $driver::instance();
 	}
-	
+
 } # class

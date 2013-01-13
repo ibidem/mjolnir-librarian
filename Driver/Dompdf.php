@@ -9,12 +9,12 @@ require_once \app\CFS::dir('vendor/dompdf').'dompdf_config.inc.php';
  * @copyright  (c) 2012, Ibidem Team
  * @license    https://github.com/ibidem/ibidem/blob/master/LICENSE.md
  */
-class Driver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDFDriver
+class Driver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDFWriter
 {
 	/**
 	 * @return string pdf
 	 */
-	function from_html($html)
+	function fromhtml($html)
 	{
 		$dompdf = new \DOMPDF();
 		$dompdf->load_html($html);
@@ -23,7 +23,7 @@ class Driver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDFDri
 
 		return $dompdf->output();
 	}
-	
+
 	/**
 	 * Stream pdf to client.
 	 */

@@ -9,12 +9,12 @@ require_once \app\CFS::dir('vendor/phpwkhtmltopdf').'WkHtmlToPdf.php';
  * @copyright  (c) 2012, Ibidem Team
  * @license    https://github.com/ibidem/ibidem/blob/master/LICENSE.md
  */
-class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\PDFDriver
+class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\PDFWriter
 {
 	/**
 	 * @return string pdf
 	 */
-	function from_html($html)
+	function fromhtml($html)
 	{
 		try
 		{
@@ -33,7 +33,7 @@ class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\P
 			throw new \app\Exception('WkHtmlToPdf not correctly configured on system: '.$exception->getMessage());
 		}
 	}
-	
+
 	/**
 	 * Stream to client.
 	 */
