@@ -7,14 +7,16 @@
  * @copyright  (c) 2012, Ibidem Team
  * @license    https://github.com/ibidem/ibidem/blob/master/LICENSE.md
  */
-class Task_Librarian extends \app\Task
+class Task_Librarian extends \app\Instantiatable implements \mjolnir\types\Task
 {
+	use \app\Trait_Task;
+	
 	/**
 	 * Execute task.
 	 */
-	function execute()
+	function run()
 	{
-		$manual = $this->config['manual'];
+		$manual = $this->get('manual', false);
 
 		if ($manual)
 		{
@@ -174,25 +176,25 @@ class Task_Librarian extends \app\Task
 		$manual_out = $manual_html_intro.$TOC.$manual.$manual_outro;
 
 		$this->writer
-			->write(' Generating HTML manual... ');
+			->writef(' Generating HTML manual... ');
 
 		// generate html docs
 		\file_put_contents(DOCROOT.'manual.html', $manual_out);
 
 		$this->writer
-			->write('done.')
+			->writef('done.')
 			->eol();
 
 		$manual_out = $manual_pdf_intro.$TOC.$manual.$manual_outro;
 
 		$this->writer
-			->write(' Generating PDF manual... ');
+			->writef(' Generating PDF manual... ');
 
 		// generate pdf docs
-		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::from_html($manual_out));
+		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::fromhtml($manual_out));
 
 		$this->writer
-			->write('done.')
+			->writef('done.')
 			->eol();
 	}
 
