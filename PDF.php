@@ -32,7 +32,7 @@ class PDF
 	 */
 	protected static function driver()
 	{
-		$driver = '\app\Driver_'.\ucfirst(\strtolower(\app\CFS::config('mjolnir/pdf')['driver']));
+		$driver = '\app\PDFDriver_'.\ucfirst(\strtolower(\app\CFS::config('mjolnir/pdf')['driver']));
 		return $driver::instance();
 	}
 
