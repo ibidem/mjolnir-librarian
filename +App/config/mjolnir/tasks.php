@@ -2,6 +2,7 @@
 	(
 		'librarian' => array
 			(
+				'category' => 'Tools',
 				'description' => array
 					(
 						'Documentation utilities.',
