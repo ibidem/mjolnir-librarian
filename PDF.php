@@ -15,7 +15,7 @@ class PDF
 	static function fromhtml($html)
 	{
 		$driver = static::driver();
-		return $driver->from_html($html);
+		return $driver->fromhtml($html);
 	}
 
 	/**
