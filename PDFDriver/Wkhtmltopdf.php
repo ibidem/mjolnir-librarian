@@ -1,6 +1,6 @@
 <?php namespace mjolnir\librarian;
 
-require_once \app\CFS::dir('vendor/phpwkhtmltopdf').'WkHtmlToPdf.php';
+require_once \app\CFS::dir('vendor/php-wkhtmltopdf').'WkHtmlToPdf.php';
 
 /**
  * @package    mjolnir
@@ -12,7 +12,7 @@ require_once \app\CFS::dir('vendor/phpwkhtmltopdf').'WkHtmlToPdf.php';
 class PDFDriver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\PDFWriter
 {
 	use \app\Trait_PDFWriter;
-	
+
 	/**
 	 * @return string pdf
 	 */
