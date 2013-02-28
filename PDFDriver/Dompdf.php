@@ -11,6 +11,8 @@ require_once \app\CFS::dir('vendor/dompdf').'dompdf_config.inc.php';
  */
 class PDFDriver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDFWriter
 {
+	use \app\Trait_PDFWriter;
+	
 	/**
 	 * @return string pdf
 	 */
