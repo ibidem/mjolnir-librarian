@@ -185,17 +185,20 @@ class Task_Librarian extends \app\Instantiatable implements \mjolnir\types\Task
 			->writef('done.')
 			->eol();
 
-		$manual_out = $manual_pdf_intro.$TOC.$manual.$manual_outro;
+		if (\extension_loaded('gd'))
+		{
+			$manual_out = $manual_pdf_intro.$TOC.$manual.$manual_outro;
 
-		$this->writer
-			->writef(' Generating PDF manual... ');
+			$this->writer
+				->writef(' Generating PDF manual... ');
 
-		// generate pdf docs
-		\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::fromhtml($manual_out));
-
-		$this->writer
-			->writef('done.')
-			->eol();
+			// generate pdf docs
+			\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::fromhtml($manual_out));
+			
+			$this->writer
+				->writef('done.')
+				->eol();
+		}
 	}
 
 	/**
