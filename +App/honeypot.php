@@ -10,12 +10,6 @@ class Markdown extends \mjolnir\librarian\Markdown
 {
 }
 
-class PDF extends \mjolnir\librarian\PDF
-{
-	/** @return \app\PDFDriver */
-	static function driver() { return parent::driver(); }
-}
-
 class PDFDriver_Dompdf extends \mjolnir\librarian\PDFDriver_Dompdf
 {
 	/** @return \app\PDFDriver_Dompdf */
@@ -26,6 +20,12 @@ class PDFDriver_Wkhtmltopdf extends \mjolnir\librarian\PDFDriver_Wkhtmltopdf
 {
 	/** @return \app\PDFDriver_Wkhtmltopdf */
 	static function instance() { return parent::instance(); }
+}
+
+class PDF extends \mjolnir\librarian\PDF
+{
+	/** @return \app\PDFDriver */
+	static function driver() { return parent::driver(); }
 }
 
 /**
