@@ -10,7 +10,7 @@
 class Task_Librarian extends \app\Instantiatable implements \mjolnir\types\Task
 {
 	use \app\Trait_Task;
-	
+
 	/**
 	 * Execute task.
 	 */
@@ -179,7 +179,7 @@ class Task_Librarian extends \app\Instantiatable implements \mjolnir\types\Task
 			->writef(' Generating HTML manual... ');
 
 		// generate html docs
-		\file_put_contents(DOCROOT.'manual.html', $manual_out);
+		\file_put_contents(\app\Env::key('sys.path').'manual.html', $manual_out);
 
 		$this->writer
 			->writef('done.')
@@ -193,8 +193,8 @@ class Task_Librarian extends \app\Instantiatable implements \mjolnir\types\Task
 				->writef(' Generating PDF manual... ');
 
 			// generate pdf docs
-			\file_put_contents(DOCROOT.'manual.pdf', \app\PDF::fromhtml($manual_out));
-			
+			\file_put_contents(\app\Env::key('sys.path').'manual.pdf', \app\PDF::fromhtml($manual_out));
+
 			$this->writer
 				->writef('done.')
 				->eol();
