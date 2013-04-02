@@ -8,7 +8,7 @@ return array
 					{
 						if (\extension_loaded('gd'))
 						{
-							return 'available';
+							return 'satisfied';
 						}
 
 						return 'failed';
