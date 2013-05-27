@@ -1,6 +1,6 @@
 <?php namespace mjolnir\librarian;
 
-require_once \app\CFS::dir('vendor/phpwkhtmltopdf').'WkHtmlToPdf.php';
+require_once \app\CFS::dir('vendor/php-wkhtmltopdf').'WkHtmlToPdf.php';
 
 /**
  * @package    mjolnir
