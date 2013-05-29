@@ -37,7 +37,7 @@ class Driver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\types\P
 	/**
 	 * Stream to client.
 	 */
-	function stream($html, $filename)
+	function stream($html, $filename, $config = [])
 	{
 		try
 		{

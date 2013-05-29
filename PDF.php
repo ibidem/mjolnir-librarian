@@ -21,10 +21,10 @@ class PDF
 	/**
 	 * Stream pdf to client.
 	 */
-	static function stream($html, $filename)
+	static function stream($html, $filename, $config = [])
 	{
 		$driver = static::driver();
-		$driver->stream($html, $filename);
+		$driver->stream($html, $filename, $config);
 	}
 
 	/**

@@ -27,9 +27,15 @@ class Driver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDFDri
 	/**
 	 * Stream pdf to client.
 	 */
-	function stream($html, $filename)
+	function stream($html, $filename, $config = [])
 	{
 		$dompdf = new \DOMPDF();
+		
+		if (isset($config['paper']) && isset($config['orientation']))
+		{
+			$dompdf->set_paper($config['paper'], $config['orientation']);
+		}
+		
 		$dompdf->load_html($html);
 		$dompdf->render();
 		$dompdf->stream($filename, ['Attachment' => 0]);
