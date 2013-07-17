@@ -100,7 +100,7 @@ class Cellmap {
    * @var int Current row when adding cells, 0-based
    */
   private $__row;
-  
+
   /**
    * @var bool Tells wether the columns' width can be modified
    */
@@ -112,7 +112,7 @@ class Cellmap {
     $this->_table = $table;
     $this->reset();
   }
-  
+
   function __destruct() {
     clear_object($this);
   }
@@ -128,7 +128,7 @@ class Cellmap {
     if ( !$this->_columns_locked ) {
       $this->_columns = array();
     }
-    
+
     $this->_rows = array();
 
     $this->_borders = array();
@@ -138,14 +138,14 @@ class Cellmap {
 
   //........................................................................
 
-  function lock_columns() { 
-    $this->_columns_locked = true; 
+  function lock_columns() {
+    $this->_columns_locked = true;
   }
 
   function is_columns_locked() {
     return $this->_columns_locked;
   }
-  
+
   function get_num_rows() { return $this->_num_rows; }
   function get_num_cols() { return $this->_num_cols; }
 
@@ -220,7 +220,7 @@ class Cellmap {
     $key = $frame->get_id();
     return isset($this->_frames[$key]);
   }
-  
+
   function get_frame_position($frame) {
     global $_dompdf_warnings;
 
@@ -290,7 +290,7 @@ class Cellmap {
     if ( $this->_columns_locked ) {
       return;
     }
-    
+
     $col =& $this->get_column($j);
     $col["used-width"] = $width;
     $next_col =& $this->get_column($j+1);
@@ -299,7 +299,7 @@ class Cellmap {
 
   function set_row_height($i, $height) {
     $row =& $this->get_row($i);
-    
+
     if ( $row["height"] !== null && $height <= $row["height"] ) {
       return;
     }
@@ -322,9 +322,9 @@ class Cellmap {
       $this->_borders[$i][$j][$h_v] = $border_spec;
       return $this->_borders[$i][$j][$h_v]["width"];
     }
-    
+
     $border = &$this->_borders[$i][$j][$h_v];
-    
+
     $o_width = $border["width"];
     $o_style = $border["style"];
     $o_color = $border["color"];
@@ -346,7 +346,7 @@ class Cellmap {
   //........................................................................
 
   function add_frame(Frame $frame) {
-    
+
     $style = $frame->get_style();
     $display = $style->display;
 
@@ -392,9 +392,9 @@ class Cellmap {
 
       return;
     }
-    
+
     $node = $frame->get_node();
-    
+
     // Determine where this cell is going
     $colspan = $node->getAttribute("colspan");
     $rowspan = $node->getAttribute("rowspan");
@@ -493,10 +493,10 @@ class Cellmap {
       $min = 0;
       $max = 0;
       for ( $cs = 0; $cs < $colspan; $cs++ ) {
-  
+
         // Resolve the frame's width(s) with other cells
         $col =& $this->get_column( $this->__col + $cs );
-  
+
         // Note: $var is either 'percent' or 'absolute'.  We compare the
         // requested percentage or absolute values with the existing widths
         // and adjust accordingly.
@@ -504,12 +504,12 @@ class Cellmap {
           $col[$var] = $val;
           $col["auto"] = false;
         }
-  
+
         $min += $col["min-width"];
         $max += $col["max-width"];
       }
-  
-  
+
+
       if ( $frame_min > $min ) {
         // The frame needs more space.  Expand each sub-column
         $inc = ($frame_min - $min) / $colspan;
@@ -518,7 +518,7 @@ class Cellmap {
           $col["min-width"] += $inc;
         }
       }
-  
+
       if ( $frame_max > $max ) {
         $inc = ($frame_max - $max) / $colspan;
         for ($c = 0; $c < $colspan; $c++) {
@@ -573,10 +573,10 @@ class Cellmap {
       foreach ( $columns as $c ) {
         if ( isset($this->_cells[$r][$c]) ) {
           $id = $this->_cells[$r][$c]->get_id();
-          
+
           $this->_frames[$id] = null;
           unset($this->_frames[$id]);
-          
+
           $this->_cells[$r][$c] = null;
           unset($this->_cells[$r][$c]);
         }
@@ -636,7 +636,7 @@ class Cellmap {
     if ( $this->_columns_locked ) {
       return;
     }
-    
+
     $x = $this->_columns[0]["x"];
     foreach ( array_keys($this->_columns) as $j ) {
       $this->_columns[$j]["x"] = $x;
@@ -688,7 +688,7 @@ class Cellmap {
 
         $h += $this->_rows[$row]["height"];
       }
-      
+
       if ( $content_height > 0 )
         $new_height = ($h / $content_height) * $table_height;
       else

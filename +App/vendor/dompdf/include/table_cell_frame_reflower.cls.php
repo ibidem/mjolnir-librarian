@@ -75,16 +75,16 @@ class Table_Cell_Frame_Reflower extends Block_Frame_Reflower {
     // Set the y position of the first line in the cell
     $page = $this->_frame->get_root();
     $this->_frame->set_current_line($line_y);
-    
+
     // Set the containing blocks and reflow each child
     foreach ( $this->_frame->get_children() as $child ) {
-      
+
       if ( $page->is_full() )
         break;
-    
+
       $child->set_containing_block($content_x, $content_y, $cb_w, $h);
       $child->reflow($this->_frame);
-    
+
       $this->process_float($child, $x + $left_space, $w - $right_space - $left_space);
     }
 

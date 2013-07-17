@@ -15,7 +15,7 @@
  * @package dompdf
  */
 class Inline_Frame_Decorator extends Frame_Decorator {
-  
+
   function __construct(Frame $frame, DOMPDF $dompdf) { parent::__construct($frame, $dompdf); }
 
   function split($frame = null, $force_pagebreak = false) {
@@ -27,8 +27,8 @@ class Inline_Frame_Decorator extends Frame_Decorator {
 
     if ( $frame->get_parent() !== $this )
       throw new DOMPDF_Exception("Unable to split: frame is not a child of this one.");
-        
-    $split = $this->copy( $this->_frame->get_node()->cloneNode() ); 
+
+    $split = $this->copy( $this->_frame->get_node()->cloneNode() );
     $this->get_parent()->insert_child_after($split, $this);
 
     // Unset the current node's right style properties
@@ -51,17 +51,17 @@ class Inline_Frame_Decorator extends Frame_Decorator {
          && ($repeat = $style->background_repeat) && $repeat !== "repeat" &&  $repeat !== "repeat-y"
        ) {
       $style->background_image = "none";
-    }           
+    }
 
     // Add $frame and all following siblings to the new split node
     $iter = $frame;
     while ($iter) {
-      $frame = $iter;      
+      $frame = $iter;
       $iter = $iter->get_next_sibling();
       $frame->reset();
       $split->append_child($frame);
     }
-    
+
     $page_breaks = array("always", "left", "right");
     $frame_style = $frame->get_style();
     if( $force_pagebreak ||
@@ -71,5 +71,5 @@ class Inline_Frame_Decorator extends Frame_Decorator {
       $this->get_parent()->split($split, true);
     }
   }
-  
-} 
+
+}

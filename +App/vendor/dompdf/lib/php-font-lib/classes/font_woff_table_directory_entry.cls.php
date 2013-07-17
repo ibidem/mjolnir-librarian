@@ -11,7 +11,7 @@ require_once dirname(__FILE__)."/font_table_directory_entry.cls.php";
 
 /**
  * WOFF font file table directory entry.
- * 
+ *
  * @package php-font-lib
  */
 class Font_WOFF_Table_Directory_Entry extends Font_Table_Directory_Entry {

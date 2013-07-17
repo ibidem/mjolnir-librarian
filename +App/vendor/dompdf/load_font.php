@@ -21,7 +21,7 @@ function usage() {
 Usage: {$_SERVER["argv"][0]} font_family [n_file [b_file] [i_file] [bi_file]]
 
 font_family:      the name of the font, e.g. Verdana, 'Times New Roman',
-                  monospace, sans-serif. If it equals to "system_fonts", 
+                  monospace, sans-serif. If it equals to "system_fonts",
                   all the system fonts will be installed.
 
 n_file:           the .ttf or .otf file for the normal, non-bold, non-italic
@@ -66,7 +66,7 @@ if ( $_SERVER["argc"] < 3 && @$_SERVER["argv"][1] != "system_fonts" ) {
  */
 function install_font_family($fontname, $normal, $bold = null, $italic = null, $bold_italic = null) {
   Font_Metrics::init();
-  
+
   // Check if the base filename is readable
   if ( !is_readable($normal) )
     throw new DOMPDF_Exception("Unable to read '$normal'.");
@@ -88,13 +88,13 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
 
   // Try $file_Bold.$ext etc.
   $path = "$dir/$file";
-  
+
   $patterns = array(
     "bold"        => array("_Bold", "b", "B", "bd", "BD"),
     "italic"      => array("_Italic", "i", "I"),
     "bold_italic" => array("_Bold_Italic", "bi", "BI", "ib", "IB"),
   );
-  
+
   foreach ($patterns as $type => $_patterns) {
     if ( !isset($$type) || !is_readable($$type) ) {
       foreach($_patterns as $_pattern) {
@@ -103,7 +103,7 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
           break;
         }
       }
-      
+
       if ( is_null($$type) )
         echo ("Unable to find $type face file.\n");
     }
@@ -132,11 +132,11 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
 
     if ( !copy($src, $dest) )
       throw new DOMPDF_Exception("Unable to copy '$src' to '$dest'");
-    
+
     $entry_name = mb_substr($dest, 0, -4);
-    
+
     echo "Generating Adobe Font Metrics for $entry_name...\n";
-    
+
     $font_obj = Font::load($dest);
     $font_obj->saveAdobeFontMetrics("$entry_name.ufm");
 
@@ -153,10 +153,10 @@ function install_font_family($fontname, $normal, $bold = null, $italic = null, $
 // If installing system fonts (may take a long time)
 if ( $_SERVER["argv"][1] === "system_fonts" ) {
   $fonts = Font_Metrics::get_system_fonts();
-  
+
   foreach ( $fonts as $family => $files ) {
     echo " >> Installing '$family'... \n";
-    
+
     if ( !isset($files["normal"]) ) {
       echo "No 'normal' style font file\n";
     }
@@ -164,7 +164,7 @@ if ( $_SERVER["argv"][1] === "system_fonts" ) {
       install_font_family( $family, @$files["normal"], @$files["bold"], @$files["italic"], @$files["bold_italic"]);
       echo "Done !\n";
     }
-    
+
     echo "\n";
   }
 }

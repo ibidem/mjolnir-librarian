@@ -61,9 +61,9 @@ if ( !function_exists("pre_var_dump") ) {
 function pre_var_dump($mixed) {
   if ( php_sapi_name() !== "cli")
     echo("<pre>");
-    
+
   var_dump($mixed);
-  
+
   if ( php_sapi_name() !== "cli")
     echo("</pre>");
 }
@@ -80,17 +80,17 @@ if ( !function_exists("d") ) {
 function d($mixed) {
   if ( php_sapi_name() !== "cli")
     echo("<pre>");
-    
+
   // line
   if ($mixed instanceof Line_Box) {
     echo $mixed;
   }
-  
+
   // other
   else {
     var_export($mixed);
   }
-  
+
   if ( php_sapi_name() !== "cli")
     echo("</pre>");
 }
@@ -300,14 +300,14 @@ function parse_data_uri($data_uri) {
   if (!preg_match('/^data:(?P<mime>[a-z0-9\/+-.]+)(;charset=(?P<charset>[a-z0-9-])+)?(?P<base64>;base64)?\,(?P<data>.*)?/i', $data_uri, $match)) {
     return false;
   }
-  
+
   $match['data'] = rawurldecode($match['data']);
   $result = array(
     'charset' => $match['charset'] ? $match['charset'] : 'US-ASCII',
     'mime'    => $match['mime'] ? $match['mime'] : 'text/plain',
     'data'    => $match['base64'] ? base64_decode($match['data']) : $match['data'],
   );
-  
+
   return $result;
 }
 
@@ -315,7 +315,7 @@ function parse_data_uri($data_uri) {
  * mb_string compatibility
  */
 if ( !function_exists("mb_strlen") ) {
-  
+
   define('MB_OVERLOAD_MAIL', 1);
   define('MB_OVERLOAD_STRING', 2);
   define('MB_OVERLOAD_REGEX', 4);
@@ -330,15 +330,15 @@ if ( !function_exists("mb_strlen") ) {
       return utf8_decode($data);
     }
   }
-  
+
   function mb_detect_encoding($data, $encoding_list = array('iso-8859-1'), $strict = false) {
     return 'iso-8859-1';
   }
-  
+
   function mb_detect_order($encoding_list = array('iso-8859-1')) {
     return 'iso-8859-1';
   }
-  
+
   function mb_internal_encoding($encoding = null) {
     if (isset($encoding)) {
       return true;
@@ -354,38 +354,38 @@ if ( !function_exists("mb_strlen") ) {
       default:     return strlen(utf8_decode($str));
     }
   }
-  
+
   function mb_strpos($haystack, $needle, $offset = 0) {
     return strpos($haystack, $needle, $offset);
   }
-  
+
   function mb_strrpos($haystack, $needle, $offset = 0) {
     return strrpos($haystack, $needle, $offset);
   }
-  
+
   function mb_strtolower( $str ) {
     return strtolower($str);
   }
-  
+
   function mb_strtoupper( $str ) {
     return strtoupper($str);
   }
-  
+
   function mb_substr($string, $start, $length = null, $encoding = 'iso-8859-1') {
     if ( is_null($length) )
       return substr($string, $start);
     else
       return substr($string, $start, $length);
   }
-  
+
   function mb_substr_count($haystack, $needle, $encoding = 'iso-8859-1') {
     return substr_count($haystack, $needle);
   }
-  
+
   function mb_encode_numericentity($str, $convmap, $encoding) {
     return htmlspecialchars($str);
   }
-  
+
   function mb_convert_case($str, $mode = MB_CASE_UPPER, $encoding = array()) {
     switch($mode) {
       case MB_CASE_UPPER: return mb_strtoupper($str);
@@ -394,7 +394,7 @@ if ( !function_exists("mb_strlen") ) {
       default: return $str;
     }
   }
-  
+
   function mb_list_encodings() {
     return array(
       "ISO-8859-1",
@@ -404,7 +404,7 @@ if ( !function_exists("mb_strlen") ) {
   }
 }
 
-/** 
+/**
  * Decoder for RLE8 compression in windows bitmaps
  * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_6x0u.asp
  */
@@ -412,7 +412,7 @@ function rle8_decode ($str, $width){
   $lineWidth = $width + (3 - ($width-1) % 4);
   $out = '';
   $cnt = strlen($str);
-  
+
   for ($i = 0; $i <$cnt; $i++) {
     $o = ord($str[$i]);
     switch ($o){
@@ -444,16 +444,16 @@ function rle8_decode ($str, $width){
   return $out;
 }
 
-/** 
+/**
  * Decoder for RLE4 compression in windows bitmaps
  * see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/bitmaps_6x0u.asp
  */
 function rle4_decode ($str, $width) {
   $w = floor($width/2) + ($width % 2);
-  $lineWidth = $w + (3 - ( ($width-1) / 2) % 4);    
+  $lineWidth = $w + (3 - ( ($width-1) / 2) % 4);
   $pixels = array();
   $cnt = strlen($str);
-  
+
   for ($i = 0; $i < $cnt; $i++) {
     $o = ord($str[$i]);
     switch ($o) {
@@ -489,21 +489,21 @@ function rle4_decode ($str, $width) {
           $pixels[] = ($j%2==0 ? ($c & 240)>>4 : $c & 15);
     }
   }
-  
+
   $out = '';
   if (count($pixels)%2) $pixels[]=0;
   $cnt = count($pixels)/2;
-  
+
   for ($i = 0; $i < $cnt; $i++)
     $out .= chr(16*$pixels[2*$i] + $pixels[2*$i+1]);
-    
+
   return $out;
-} 
+}
 
 if ( !function_exists("imagecreatefrombmp") ) {
 
 /**
- * Credit goes to mgutt 
+ * Credit goes to mgutt
  * http://www.programmierer-forum.de/function-imagecreatefrombmp-welche-variante-laeuft-t143137.htm
  * Modified by Fabien Menager to support RGB555 BMP format
  */
@@ -514,35 +514,35 @@ function imagecreatefrombmp($filename) {
     trigger_error('imagecreatefrombmp: Can not open ' . $filename, E_USER_WARNING);
     return false;
   }
-  
+
   $bytes_read = 0;
-  
+
   // read file header
   $meta = unpack('vtype/Vfilesize/Vreserved/Voffset', fread($fh, 14));
-  
+
   // check for bitmap
   if ($meta['type'] != 19778) {
     trigger_error('imagecreatefrombmp: ' . $filename . ' is not a bitmap!', E_USER_WARNING);
     return false;
   }
-  
+
   // read image header
   $meta += unpack('Vheadersize/Vwidth/Vheight/vplanes/vbits/Vcompression/Vimagesize/Vxres/Vyres/Vcolors/Vimportant', fread($fh, 40));
   $bytes_read += 40;
-  
+
   // read additional bitfield header
   if ($meta['compression'] == 3) {
     $meta += unpack('VrMask/VgMask/VbMask', fread($fh, 12));
     $bytes_read += 12;
   }
-  
+
   // set bytes and padding
   $meta['bytes'] = $meta['bits'] / 8;
   $meta['decal'] = 4 - (4 * (($meta['width'] * $meta['bytes'] / 4)- floor($meta['width'] * $meta['bytes'] / 4)));
   if ($meta['decal'] == 4) {
     $meta['decal'] = 0;
   }
-  
+
   // obtain imagesize
   if ($meta['imagesize'] < 1) {
     $meta['imagesize'] = $meta['filesize'] - $meta['offset'];
@@ -555,10 +555,10 @@ function imagecreatefrombmp($filename) {
       }
     }
   }
-  
+
   // calculate colors
   $meta['colors'] = !$meta['colors'] ? pow(2, $meta['bits']) : $meta['colors'];
-  
+
   // read color palette
   $palette = array();
   if ($meta['bits'] < 16) {
@@ -570,16 +570,16 @@ function imagecreatefrombmp($filename) {
       }
     }
   }
-  
+
   // ignore extra bitmap headers
   if ($meta['headersize'] > $bytes_read) {
     fread($fh, $meta['headersize'] - $bytes_read);
   }
-  
+
   // create gd image
   $im = imagecreatetruecolor($meta['width'], $meta['height']);
   $data = fread($fh, $meta['imagesize']);
-  
+
   // uncompress data
   switch ($meta['compression']) {
     case 1: $data = rle8_decode($data, $meta['width']); break;
@@ -613,7 +613,7 @@ function imagecreatefrombmp($filename) {
 
           if (empty($meta['rMask']) || $meta['rMask'] != 0xf800)
             $color[1] = (($color[1] & 0x7c00) >> 7) * 65536 + (($color[1] & 0x03e0) >> 2) * 256 + (($color[1] & 0x001f) << 3); // 555
-          else 
+          else
             $color[1] = (($color[1] & 0xf800) >> 8) * 65536 + (($color[1] & 0x07e0) >> 3) * 256 + (($color[1] & 0x001f) << 3); // 565
           break;
         case 8:
@@ -658,22 +658,22 @@ function imagecreatefrombmp($filename) {
 
 /**
  * getimagesize doesn't give a good size for 32bit BMP image v5
- * 
+ *
  * @param string $filename
  * @return array The same format as getimagesize($filename)
  */
 function dompdf_getimagesize($filename) {
   static $cache = array();
-  
+
   if ( isset($cache[$filename]) ) {
     return $cache[$filename];
   }
-  
+
   list($width, $height, $type) = getimagesize($filename);
-  
+
   if ( $width == null || $height == null ) {
     $data = file_get_contents($filename, null, null, 0, 26);
-    
+
     if ( substr($data, 0, 2) === "BM" ) {
       $meta = unpack('vtype/Vfilesize/Vreserved/Voffset/Vheadersize/Vwidth/Vheight', $data);
       $width  = (int)$meta['width'];
@@ -681,13 +681,13 @@ function dompdf_getimagesize($filename) {
       $type   = IMAGETYPE_BMP;
     }
   }
-  
+
   return $cache[$filename] = array($width, $height, $type);
 }
 
 /**
  * Converts a CMYK color to RGB
- * 
+ *
  * @param int $c
  * @param int $m
  * @param int $y
@@ -698,20 +698,20 @@ function cmyk_to_rgb($c, $m = null, $y = null, $k = null) {
   if (is_array($c)) {
     list($c, $m, $y, $k) = $c;
   }
-  
+
   $c *= 255;
   $m *= 255;
   $y *= 255;
   $k *= 255;
-  
+
   $r = (1 - round(2.55 * ($c+$k))) ;
   $g = (1 - round(2.55 * ($m+$k))) ;
   $b = (1 - round(2.55 * ($y+$k))) ;
-    
+
   if($r<0) $r = 0;
   if($g<0) $g = 0;
   if($b<0) $b = 0;
-    
+
   return array(
     $r, $g, $b,
     "r" => $r, "g" => $g, "b" => $b
@@ -738,7 +738,7 @@ if ( !function_exists("date_default_timezone_get") ) {
   function date_default_timezone_get() {
     return "";
   }
-  
+
   function date_default_timezone_set($timezone_identifier) {
     return true;
   }
@@ -779,7 +779,7 @@ function record_warnings($errno, $errstr, $errfile, $errline) {
 function bt() {
   if ( php_sapi_name() !== "cli")
     echo("<pre>");
-    
+
   $bt = debug_backtrace();
 
   array_shift($bt); // remove actual bt() call
@@ -798,7 +798,7 @@ function bt() {
     $i++;
   }
   echo "\n";
-  
+
   if ( php_sapi_name() !== "cli")
     echo("</pre>");
 }
@@ -905,13 +905,13 @@ if ( function_exists("curl_init") ) {
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, TRUE);
-    
+
     $data = curl_exec($ch);
     $raw_headers = substr($data, 0, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
     $headers = preg_split("/[\n\r]+/", trim($raw_headers));
     $data = substr($data, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
     curl_close($ch);
-    
+
     return $data;
   }
 }
@@ -919,7 +919,7 @@ else {
   function DOMPDF_fetch_url($url, &$headers = null) {
     $data = file_get_contents($url);
     $headers = $http_response_header;
-    
+
     return $data;
   }
 }
@@ -935,7 +935,7 @@ if ( PHP_VERSION_ID < 50300 ) {
         clear_object($value);
       }
     }
-    
+
     $object = null;
     unset($object);
   }
@@ -943,5 +943,5 @@ if ( PHP_VERSION_ID < 50300 ) {
 else {
   function clear_object(&$object) {
     // void
-  } 
+  }
 }

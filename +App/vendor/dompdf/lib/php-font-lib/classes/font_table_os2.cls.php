@@ -9,7 +9,7 @@
 
 /**
  * `OS/2` font table.
- * 
+ *
  * @package php-font-lib
  */
 class Font_Table_os2 extends Font_Table {

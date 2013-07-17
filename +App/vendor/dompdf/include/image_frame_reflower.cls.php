@@ -22,7 +22,7 @@ class Image_Frame_Reflower extends Frame_Reflower {
 
   function reflow(Frame_Decorator $block = null) {
     $this->_frame->position();
-    
+
     //FLOAT
     //$frame = $this->_frame;
     //$page = $frame->get_root();
@@ -31,7 +31,7 @@ class Image_Frame_Reflower extends Frame_Reflower {
     //}
     // Set the frame's width
     $this->get_min_max_width();
-    
+
     if ( $block ) {
       $block->add_frame_to_line($this->_frame);
     }
@@ -101,7 +101,7 @@ class Image_Frame_Reflower extends Frame_Reflower {
     if ($width == 0 || $height == 0) {
       // Determine the image's size. Time consuming. Only when really needed!
       list($img_width, $img_height) = dompdf_getimagesize($this->_frame->get_image_url());
-      
+
       // don't treat 0 as error. Can be downscaled or can be catched elsewhere if image not readable.
       // Resample according to px per inch
       // See also List_Bullet_Image_Frame_Decorator::__construct
@@ -121,6 +121,6 @@ class Image_Frame_Reflower extends Frame_Reflower {
     $style->height = $height . "pt";
 
     return array( $width, $width, "min" => $width, "max" => $width);
-    
+
   }
 }

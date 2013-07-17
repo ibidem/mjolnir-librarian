@@ -164,17 +164,17 @@ class CSS_Color {
       // Assume the array has the right format...
       // FIXME: should/could verify this.
       return $colour;
-    
+
     $colour = strtolower($colour);
-      
+
     if ( in_array($colour, array("transparent", "inherit")) )
       return $colour;
-    
-    if (isset(self::$cssColorNames[$colour])) 
+
+    if (isset(self::$cssColorNames[$colour]))
       return self::getArray(self::$cssColorNames[$colour]);
-      
+
     $length = mb_strlen($colour);
-    
+
     // #rgb format
     if ( $length == 4 && $colour[0] === "#" ) {
       return self::getArray($colour[1].$colour[1].$colour[2].$colour[2].$colour[3].$colour[3]);
@@ -187,7 +187,7 @@ class CSS_Color {
     } else if ( mb_strpos($colour, "rgb") !== false ) {
       $i = mb_strpos($colour, "(");
       $j = mb_strpos($colour, ")");
-      
+
       // Bad colour value
       if ($i === false || $j === false)
         return null;
@@ -196,22 +196,22 @@ class CSS_Color {
 
       if (count($triplet) != 3)
         return null;
-      
+
       foreach (array_keys($triplet) as $c) {
         $triplet[$c] = trim($triplet[$c]);
-        
-        if ( $triplet[$c][mb_strlen($triplet[$c]) - 1] === "%" ) 
+
+        if ( $triplet[$c][mb_strlen($triplet[$c]) - 1] === "%" )
           $triplet[$c] = round($triplet[$c] * 2.55);
       }
-      
+
       return self::getArray(vsprintf("%02X%02X%02X", $triplet));
-    
+
     // cmyk( c,m,y,k ) format
     // http://www.w3.org/TR/css3-gcpm/#cmyk-colors
     } else if ( mb_strpos($colour, "cmyk") !== false ) {
       $i = mb_strpos($colour, "(");
       $j = mb_strpos($colour, ")");
-      
+
       // Bad colour value
       if ($i === false || $j === false)
         return null;
@@ -220,20 +220,20 @@ class CSS_Color {
 
       if (count($values) != 4)
         return null;
-      
+
       foreach ($values as &$c) {
         $c = floatval(trim($c));
         if ($c > 1.0) $c = 1.0;
         if ($c < 0.0) $c = 0.0;
       }
-      
+
       return self::getArray($values);
     }
   }
-  
+
   static function getArray($colour) {
     $c = array(null, null, null, null, "hex" => null);
-    
+
     if (is_array($colour)) {
       $c = $colour;
       $c["c"] = $c[0];
@@ -251,7 +251,7 @@ class CSS_Color {
       $c["b"] = $c[2];
       $c["hex"] = "#$colour";
     }
-    
+
     return $c;
   }
 }

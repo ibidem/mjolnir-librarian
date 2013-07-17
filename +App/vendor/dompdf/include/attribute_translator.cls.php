@@ -16,7 +16,7 @@
  */
 class Attribute_Translator {
   static $_style_attr = "_html_style_attribute";
-  
+
   // Munged data originally from
   // http://www.w3.org/TR/REC-html40/index/attributes.html
   // http://www.cs.tut.fi/~jkorpela/html2css.html
@@ -176,15 +176,15 @@ class Attribute_Translator {
       'width' => 'width: %s;',
     ),
   );
-  
+
   static protected $_last_basefont_size = 3;
   static protected $_font_size_lookup = array(
     // For basefont support
-    -3 => "4pt", 
-    -2 => "5pt", 
-    -1 => "6pt", 
-     0 => "7pt", 
-    
+    -3 => "4pt",
+    -2 => "5pt",
+    -1 => "6pt",
+     0 => "7pt",
+
      1 => "8pt",
      2 => "10pt",
      3 => "12pt",
@@ -192,15 +192,15 @@ class Attribute_Translator {
      5 => "18pt",
      6 => "24pt",
      7 => "34pt",
-     
+
     // For basefont support
-     8 => "48pt", 
-     9 => "44pt", 
-    10 => "52pt", 
-    11 => "60pt", 
+     8 => "48pt",
+     9 => "44pt",
+    10 => "52pt",
+    11 => "60pt",
   );
-  
-  
+
+
   static function translate_attributes(Frame $frame) {
     $node = $frame->get_node();
     $tag = $node->tagName;
@@ -221,7 +221,7 @@ class Attribute_Translator {
       $value = $attr_node->value;
 
       $target = $valid_attrs[$attr];
-      
+
       // Look up $value in $target, if $target is an array:
       if ( is_array($target) ) {
 
@@ -233,12 +233,12 @@ class Attribute_Translator {
         $style .= " " . self::_resolve_target($node, $target, $value);
       }
     }
-    
+
     if ( !is_null($style) ) {
       $style = ltrim($style);
       $node->setAttribute(self::$_style_attr, $style);
     }
-    
+
   }
 
   static protected function _resolve_target($node, $target, $value) {
@@ -247,46 +247,46 @@ class Attribute_Translator {
       $func = "_" . mb_substr($target, 1);
       return self::$func($node, $value);
     }
-    
+
     return $value ? sprintf($target, $value) : "";
   }
-  
+
   static function append_style(DOMNode $node, $new_style) {
     $style = rtrim($node->getAttribute(self::$_style_attr), ";");
     $style .= $new_style;
     $style = ltrim($style, ";");
     $node->setAttribute(self::$_style_attr, $style);
   }
-  
+
   static protected function get_cell_list($node) {
     $xpath = new DOMXpath($node->ownerDocument);
-    
+
     switch($node->nodeName) {
       case "table":
         $query = "tr/td | thead/tr/td | tbody/tr/td | tfoot/tr/td | tr/th | thead/tr/th | tbody/tr/th | tfoot/tr/th";
         break;
-        
+
       case "tbody":
       case "tfoot":
       case "thead":
         $query = "tr/td | tr/th";
         break;
-        
+
       case "tr":
         $query = "td | th";
         break;
     }
-    
+
     return $xpath->query($query, $node);
-  } 
+  }
 
   //.....................................................................
-  
+
   static protected function _get_valid_color($value) {
     if ( preg_match('/^#?([0-9A-F]{6})$/i', $value, $matches) ) {
       $value = "#$matches[1]";
     }
-    
+
     return $value;
   }
 
@@ -302,11 +302,11 @@ class Attribute_Translator {
 
   static protected function _set_table_cellpadding($node, $value) {
     $cell_list = self::get_cell_list($node);
-    
+
     foreach ($cell_list as $cell) {
       self::append_style($cell, "; padding: {$value}px;");
     }
-    
+
     return null;
   }
 
@@ -319,7 +319,7 @@ class Attribute_Translator {
       $style = ltrim($style, ";");
       $cell->setAttribute(self::$_style_attr, $style);
     }
-    
+
     $style = rtrim($node->getAttribute(self::$_style_attr), ";");
     $style .= "; border-width: $value" . "px; ";
     return ltrim($style, "; ");
@@ -330,13 +330,13 @@ class Attribute_Translator {
 
     if ( $value == 0 )
       $style .= "; border-collapse: collapse;";
-      
+
     else
       $style .= "; border-spacing: {$value}px; border-collapse: separate;";
-      
+
     return ltrim($style, ";");
   }
-  
+
   static protected function _set_table_rules($node, $value) {
     $new_style = "; border-collapse: collapse;";
     switch ($value) {
@@ -359,23 +359,23 @@ class Attribute_Translator {
     case "all":
       $new_style .= "border-style: solid; border-width: 1px; ";
       break;
-      
+
     default:
       // Invalid value
       return null;
     }
 
     $cell_list = self::get_cell_list($node);
-    
+
     foreach ($cell_list as $cell) {
       $style = $cell->getAttribute(self::$_style_attr);
       $style .= $new_style;
       $cell->setAttribute(self::$_style_attr, $style);
     }
-    
+
     $style = rtrim($node->getAttribute(self::$_style_attr), ";");
     $style .= "; border-collapse: collapse; ";
-    
+
     return ltrim($style, "; ");
   }
 
@@ -392,7 +392,7 @@ class Attribute_Translator {
       $width = "100%";
 
     $remainder = 100 - (double)rtrim($width, "% ");
-    
+
     switch ($value) {
     case "left":
       $style .= "; margin-right: $remainder %;";
@@ -435,7 +435,7 @@ class Attribute_Translator {
   static protected function _set_table_row_bgcolor($node, $value) {
     $cell_list = self::get_cell_list($node);
     $value = self::_get_valid_color($value);
-    
+
     foreach ($cell_list as $cell) {
       self::append_style($cell, "; background-color: $value;");
     }
@@ -446,7 +446,7 @@ class Attribute_Translator {
   static protected function _set_body_link($node, $value) {
     $a_list = $node->getElementsByTagName("a");
     $value = self::_get_valid_color($value);
-    
+
     foreach ($a_list as $a) {
       self::append_style($a, "; color: $value;");
     }
@@ -460,7 +460,7 @@ class Attribute_Translator {
     self::$_last_basefont_size = $value;
     return null;
   }
-  
+
   static protected function _set_font_size($node, $value) {
     $style = $node->getAttribute(self::$_style_attr);
 

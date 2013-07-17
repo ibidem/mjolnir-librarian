@@ -1,5 +1,5 @@
 <?php return array (
-  'codeToName' => 
+  'codeToName' =>
   array (
   ),
   'isUnicode' => true,
@@ -14,7 +14,7 @@
   'Descender' => '-235.83984375',
   'UnderlineThickness' => '43.9453125',
   'IsFixedPitch' => 'false',
-  'FontBBox' => 
+  'FontBBox' =>
   array (
     0 => '-1069',
     1 => '-415',
@@ -22,7 +22,7 @@
     3 => '1174',
   ),
   'StartCharMetrics' => '5180',
-  'C' => 
+  'C' =>
   array (
     0 => 5395,
     32 => 348,

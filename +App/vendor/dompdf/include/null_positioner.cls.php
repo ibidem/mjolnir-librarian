@@ -20,5 +20,5 @@ class Null_Positioner extends Positioner {
   }
 
   function position() { return; }
-  
+
 }

@@ -15,10 +15,10 @@
  */
 class Block_Frame_Decorator extends Frame_Decorator {
   protected $_cl;    // current line index
-  
+
   /**
    * The block's line boxes
-   * 
+   *
    * @var array
    */
   protected $_line_boxes;
@@ -27,7 +27,7 @@ class Block_Frame_Decorator extends Frame_Decorator {
 
   function __construct(Frame $frame, DOMPDF $dompdf) {
     parent::__construct($frame, $dompdf);
-    
+
     $this->_line_boxes = array(new Line_Box($this));
     $this->_cl = 0;
   }
@@ -36,7 +36,7 @@ class Block_Frame_Decorator extends Frame_Decorator {
 
   function reset() {
     parent::reset();
-    
+
     $this->_line_boxes = array(new Line_Box($this));
     $this->_cl = 0;
   }
@@ -62,8 +62,8 @@ class Block_Frame_Decorator extends Frame_Decorator {
   /**
    * @return array
    */
-  function get_line_boxes() { 
-    return $this->_line_boxes; 
+  function get_line_boxes() {
+    return $this->_line_boxes;
   }
 
   //........................................................................
@@ -117,24 +117,24 @@ class Block_Frame_Decorator extends Frame_Decorator {
     if ( !$frame->is_in_flow() ) {
       return;
     }
-    
+
     $style = $frame->get_style();
-    
+
     $frame->set_containing_line($this->_line_boxes[$this->_cl]);
-    
+
     /*
     // Adds a new line after a block, only if certain conditions are met
-    if ((($frame instanceof Inline_Frame_Decorator && $frame->get_node()->nodeName !== "br") || 
-          $frame instanceof Text_Frame_Decorator && trim($frame->get_text())) && 
-        ($frame->get_prev_sibling() && $frame->get_prev_sibling()->get_style()->display === "block" && 
+    if ((($frame instanceof Inline_Frame_Decorator && $frame->get_node()->nodeName !== "br") ||
+          $frame instanceof Text_Frame_Decorator && trim($frame->get_text())) &&
+        ($frame->get_prev_sibling() && $frame->get_prev_sibling()->get_style()->display === "block" &&
          $this->_line_boxes[$this->_cl]->w > 0 )) {
-           
+
            $this->maximize_line_height( $style->length_in_pt($style->line_height), $frame );
            $this->add_line();
-         
+
            // Add each child of the inline frame to the line individually
            foreach ($frame->get_children() as $child)
-             $this->add_frame_to_line( $child );     
+             $this->add_frame_to_line( $child );
     }
     else*/
 
@@ -195,7 +195,7 @@ class Block_Frame_Decorator extends Frame_Decorator {
       $current_line->wc += count(preg_split("/\s+/", trim($frame->get_text())));
 
     $this->increase_line_width($w);
-    
+
     $this->maximize_line_height($frame->get_margin_height(), $frame);
   }
 
@@ -257,7 +257,7 @@ class Block_Frame_Decorator extends Frame_Decorator {
     $y = $this->_line_boxes[$this->_cl]->y + $this->_line_boxes[$this->_cl]->h;
 
     $new_line = new Line_Box($this, $y);
-    
+
     $this->_line_boxes[ ++$this->_cl ] = $new_line;
   }
 

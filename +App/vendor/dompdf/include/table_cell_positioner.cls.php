@@ -16,7 +16,7 @@
 class Table_Cell_Positioner extends Positioner {
 
   function __construct(Frame_Decorator $frame) { parent::__construct($frame); }
-  
+
   //........................................................................
 
   function position() {

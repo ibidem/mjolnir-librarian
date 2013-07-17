@@ -18,9 +18,9 @@ class Block_Renderer extends Abstract_Renderer {
   //........................................................................
 
   function render(Frame $frame) {
-    $style = $frame->get_style(); 
+    $style = $frame->get_style();
     list($x, $y, $w, $h) = $frame->get_border_box();
-    
+
     $this->_set_opacity( $frame->get_opacity( $style->opacity ) );
 
     if ( $frame->get_node()->nodeName === "body" ) {
@@ -33,7 +33,7 @@ class Block_Renderer extends Abstract_Renderer {
         $style->margin_bottom),
       $style->width);
     }
-    
+
     // Draw our background, border and content
     if ( ($bg = $style->background_color) !== "transparent" ) {
       $this->_canvas->filled_rectangle( $x, $y, $w, $h, $bg );
@@ -44,14 +44,14 @@ class Block_Renderer extends Abstract_Renderer {
 
     $this->_render_border($frame);
     $this->_render_outline($frame);
-    
+
     if (DEBUG_LAYOUT && DEBUG_LAYOUT_BLOCKS) {
       $this->_debug_layout($frame->get_border_box(), "red");
       if (DEBUG_LAYOUT_PADDINGBOX) {
         $this->_debug_layout($frame->get_padding_box(), "red", array(0.5, 0.5));
       }
     }
-    
+
     if (DEBUG_LAYOUT && DEBUG_LAYOUT_LINES && $frame->get_decorator()) {
       foreach ($frame->get_decorator()->get_line_boxes() as $line) {
         $frame->_debug_layout(array($line->x, $line->y, $line->w, $line->h), "orange");
@@ -66,14 +66,14 @@ class Block_Renderer extends Abstract_Renderer {
 
     // If all the borders are "solid" with the same color and style, we'd better draw a rectangle
     if (
-      in_array($bp["top"]["style"], array("solid", "dashed", "dotted")) && 
+      in_array($bp["top"]["style"], array("solid", "dashed", "dotted")) &&
       $bp["top"]    == $bp["right"] &&
       $bp["right"]  == $bp["bottom"] &&
       $bp["bottom"] == $bp["left"]
     ) {
       $props = $bp["top"];
       if ( $props["color"] === "transparent" || $props["width"] <= 0 ) return;
-      
+
       list($x, $y, $w, $h) = $bbox;
       $width = $style->length_in_pt($props["width"]);
       $pattern = $this->_get_dash_pattern($props["style"], $width);
@@ -85,13 +85,13 @@ class Block_Renderer extends Abstract_Renderer {
                     $style->length_in_pt($bp["right"]["width"]),
                     $style->length_in_pt($bp["bottom"]["width"]),
                     $style->length_in_pt($bp["left"]["width"]));
-    
+
     foreach ($bp as $side => $props) {
       list($x, $y, $w, $h) = $bbox;
 
-      if ( !$props["style"] || 
-            $props["style"] === "none" || 
-            $props["width"] <= 0 || 
+      if ( !$props["style"] ||
+            $props["style"] === "none" ||
+            $props["width"] <= 0 ||
             $props["color"] == "transparent" )
         continue;
 
@@ -124,16 +124,16 @@ class Block_Renderer extends Abstract_Renderer {
 
   protected function _render_outline(Frame_Decorator $frame, $corner_style = "bevel") {
     $style = $frame->get_style();
-    
+
     $props = array(
       "width" => $style->outline_width,
       "style" => $style->outline_style,
       "color" => $style->outline_color,
     );
-    
+
     if ( !$props["style"] || $props["style"] === "none" || $props["width"] <= 0 )
       return;
-      
+
     $bbox = $frame->get_border_box();
     $offset = $style->length_in_pt($props["width"]);
     $pattern = $this->_get_dash_pattern($props["style"], $offset);
@@ -144,7 +144,7 @@ class Block_Renderer extends Abstract_Renderer {
       $bbox[1] -= $offset / 2;
       $bbox[2] += $offset;
       $bbox[3] += $offset;
-    
+
       list($x, $y, $w, $h) = $bbox;
       $this->_canvas->rectangle($x, $y, $w, $h, $props["color"], $offset, $pattern);
       return;
@@ -154,11 +154,11 @@ class Block_Renderer extends Abstract_Renderer {
     $bbox[1] -= $offset;
     $bbox[2] += $offset * 2;
     $bbox[3] += $offset * 2;
-    
+
     $method = "_border_" . $props["style"];
     $widths = array_fill(0, 4, $props["width"]);
     $sides = array("top", "right", "left", "bottom");
-    
+
     foreach ($sides as $side) {
       list($x, $y, $w, $h) = $bbox;
 

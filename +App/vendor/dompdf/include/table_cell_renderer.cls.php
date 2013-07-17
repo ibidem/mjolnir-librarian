@@ -19,14 +19,14 @@ class Table_Cell_Renderer extends Block_Renderer {
 
   function render(Frame $frame) {
     $style = $frame->get_style();
-    
+
     if ( trim($frame->get_node()->nodeValue) === "" && $style->empty_cells === "hide" ) {
       return;
     }
 
     $this->_set_opacity( $frame->get_opacity( $style->opacity ) );
     list($x, $y, $w, $h) = $frame->get_border_box();
-    
+
     // Draw our background, border and content
     if ( ($bg = $style->background_color) !== "transparent" ) {
       $this->_canvas->filled_rectangle($x, $y, $w, $h, $bg);
@@ -35,7 +35,7 @@ class Table_Cell_Renderer extends Block_Renderer {
     if ( ($url = $style->background_image) && $url !== "none" ) {
       $this->_background_image($url, $x, $y, $w, $h, $style);
     }
-    
+
     $table = Table_Frame_Decorator::find_parent_table($frame);
 
     if ( $table->get_style()->border_collapse !== "collapse" ) {

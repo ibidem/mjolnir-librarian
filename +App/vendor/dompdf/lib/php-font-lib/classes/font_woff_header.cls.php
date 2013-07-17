@@ -11,7 +11,7 @@ require_once dirname(__FILE__)."/font_truetype_header.cls.php";
 
 /**
  * WOFF font file header.
- * 
+ *
  * @package php-font-lib
  */
 class Font_WOFF_Header extends Font_TrueType_Header {

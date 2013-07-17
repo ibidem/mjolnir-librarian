@@ -16,7 +16,7 @@
  * @package dompdf
  */
 class Text_Renderer extends Abstract_Renderer {
-  
+
   const DECO_THICKNESS = 0.02;     // Thickness of underline. Screen: 0.08, print: better less, e.g. 0.04
 
   //Tweaking if $base and $descent are not accurate.
@@ -28,14 +28,14 @@ class Text_Renderer extends Abstract_Renderer {
   const OVERLINE_OFFSET = 0.0;    // Relative to top of text
   const LINETHROUGH_OFFSET = 0.0; // Relative to centre of text.
   const DECO_EXTENSION = 0.0;     // How far to extend lines past either end, in pt
-    
+
   //........................................................................
 
   function render(Frame $frame) {
     $text = $frame->get_text();
     if ( trim($text) === "" )
       return;
-      
+
     $style = $frame->get_style();
     list($x, $y) = $frame->get_position();
     $cb = $frame->get_containing_block();
@@ -53,23 +53,23 @@ class Text_Renderer extends Abstract_Renderer {
 
     $font = $style->font_family;
     $size = $frame_font_size = $style->font_size;
-    $height = $style->height;    
+    $height = $style->height;
     $word_spacing = $frame->get_text_spacing() + $style->length_in_pt($style->word_spacing);
     $char_spacing = $style->length_in_pt($style->letter_spacing);
     $width = $style->width;
 
     /*$text = str_replace(
       array("{PAGE_NUM}"),
-      array($this->_canvas->get_page_number()), 
+      array($this->_canvas->get_page_number()),
       $text
     );*/
-    
+
     $this->_canvas->text($x, $y, $text,
                          $font, $size,
                          $style->color, $word_spacing, $char_spacing);
-    
+
     $line = $frame->get_containing_line();
-    
+
     // FIXME Instead of using the tallest frame to position,
     // the decoration, the text should be well placed
     if ( false && $line->tallest_frame ) {
@@ -78,14 +78,14 @@ class Text_Renderer extends Abstract_Renderer {
       $size = $style->font_size;
       $height = $line->h * ($size / $style->line_height);
     }
-    
+
     if ( method_exists( $this->_canvas, "get_cpdf" ) ) {
       $cpdf = $this->_canvas->get_cpdf();
-      
+
       //$cpdf_font = $cpdf->fonts[$style->font_family];
       //$base = ($cpdf_font["UnderlinePosition"]*$size)/1000;
       //$descent = (($cpdf_font["Ascender"]-$cpdf_font["Descender"])*$size)/1000;
-      
+
       $fontBBox = $cpdf->fonts[$style->font_family]['FontBBox'];
       $base = (($fontBBox[3]*$size)/1000) * 0.90;
       $descent = ($fontBBox[1]*$size)/1000;
@@ -98,22 +98,22 @@ class Text_Renderer extends Abstract_Renderer {
       $descent = $size-$height;
       //print '<pre>Text_Renderer other than cpdf:'.$base.' '.$descent.' '.$size.'</pre>';
     }
-    
+
     // Handle text decoration:
     // http://www.w3.org/TR/CSS21/text.html#propdef-text-decoration
-    
+
     // Draw all applicable text-decorations.  Start with the root and work our way down.
     $p = $frame;
     $stack = array();
     while ( $p = $p->get_parent() )
       $stack[] = $p;
-    
+
     while ( isset($stack[0]) ) {
       $f = array_pop($stack);
 
       if ( ($text_deco = $f->get_style()->text_decoration) === "none" )
         continue;
-        
+
       $deco_y = $y; //$line->y;
       $color = $f->get_style()->color;
 
@@ -141,7 +141,7 @@ class Text_Renderer extends Abstract_Renderer {
       $this->_canvas->line($x1, $deco_y, $x2, $deco_y, $color, $size * self::DECO_THICKNESS);
 
     }
-    
+
     if (DEBUG_LAYOUT && DEBUG_LAYOUT_LINES) {
       $text_width = Font_Metrics::get_text_width($text, $font, $frame_font_size);
       $this->_debug_layout(array($x, $y, $text_width+($line->wc-1)*$word_spacing, $frame_font_size), "orange", array(0.5, 0.5));

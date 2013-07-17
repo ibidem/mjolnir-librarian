@@ -9,7 +9,7 @@
 
 /**
  * `head` font table.
- * 
+ *
  * @package php-font-lib
  */
 class Font_Table_head extends Font_Table {
@@ -32,10 +32,10 @@ class Font_Table_head extends Font_Table {
     "indexToLocFormat"   => self::int16,
     "glyphDataFormat"    => self::int16,
   );
-  
+
   protected function _parse(){
     parent::_parse();
-    
+
     if($this->data["magicNumber"] != 0x5F0F3CF5) {
       throw new Exception("Incorrect magic number (".dechex($this->data["magicNumber"]).")");
     }

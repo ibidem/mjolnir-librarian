@@ -149,7 +149,7 @@ class PDFLib_Adapter implements Canvas {
     if ( mb_strtolower($orientation) === "landscape" ) {
       list($size[2], $size[3]) = array($size[3], $size[2]);
     }
-    
+
     $this->_width = $size[2] - $size[0];
     $this->_height= $size[3] - $size[1];
 
@@ -255,7 +255,7 @@ class PDFLib_Adapter implements Canvas {
   function add_info($label, $value) {
     $this->_pdf->set_info($label, $value);
   }
-  
+
   /**
    * Opens a new 'object' (template in PDFLib-speak)
    *
@@ -466,7 +466,7 @@ class PDFLib_Adapter implements Canvas {
       $type = "gray";
       list($c1, $c2, $c3, $c4) = array($color[0], $color[1], null, null);
     }
-    
+
     $this->_pdf->setcolor("stroke", $type, $c1, $c2, $c3, $c4);
   }
 
@@ -493,13 +493,13 @@ class PDFLib_Adapter implements Canvas {
       $type = "gray";
       list($c1, $c2, $c3, $c4) = array($color[0], $color[1], null, null);
     }
-    
+
     $this->_pdf->setcolor("fill", $type, $c1, $c2, $c3, $c4);
   }
-  
+
   /**
-   * Sets the opacity 
-   * 
+   * Sets the opacity
+   *
    * @param $opacity
    * @param $mode
    */
@@ -509,7 +509,7 @@ class PDFLib_Adapter implements Canvas {
       $this->_pdf->set_gstate($gstate);
     }
   }
-  
+
   function set_default_view($view, $options = array()) {
     // TODO
     // http://www.pdflib.com/fileadmin/pdflib/pdf/manuals/PDFlib-8.0.2-API-reference.pdf
@@ -614,53 +614,53 @@ class PDFLib_Adapter implements Canvas {
     $this->_pdf->rect(floatval($x1), floatval($y1), floatval($w), floatval($h));
     $this->_pdf->fill();
   }
-  
+
   function clipping_rectangle($x1, $y1, $w, $h) {
     $this->_pdf->save();
-    
+
     $y1 = $this->y($y1) - $h;
-    
+
     $this->_pdf->rect(floatval($x1), floatval($y1), floatval($w), floatval($h));
     $this->_pdf->clip();
   }
-  
+
   function clipping_end() {
     $this->_pdf->restore();
   }
-  
+
   function save() {
     $this->_pdf->save();
   }
-  
+
   function restore() {
     $this->_pdf->restore();
   }
-  
+
   function rotate($angle, $x, $y) {
     $pdf = $this->_pdf;
     $pdf->translate($x, $this->_height-$y);
     $pdf->rotate(-$angle);
     $pdf->translate(-$x, -$this->_height+$y);
   }
-  
+
   function skew($angle_x, $angle_y, $x, $y) {
     $pdf = $this->_pdf;
     $pdf->translate($x, $this->_height-$y);
     $pdf->skew($angle_y, $angle_x); // Needs to be inverted
     $pdf->translate(-$x, -$this->_height+$y);
   }
-  
+
   function scale($s_x, $s_y, $x, $y) {
     $pdf = $this->_pdf;
     $pdf->translate($x, $this->_height-$y);
     $pdf->scale($s_x, $s_y);
     $pdf->translate(-$x, -$this->_height+$y);
   }
-  
+
   function translate($t_x, $t_y) {
     $this->_pdf->translate($t_x, -$t_y);
   }
-  
+
   function transform($a, $b, $c, $d, $e, $f) {
     $this->_pdf->concat($a, $b, $c, $d, $e, $f);
   }
@@ -751,7 +751,7 @@ class PDFLib_Adapter implements Canvas {
   }
 
   //........................................................................
-  
+
   function javascript($code) {
     if ( defined("DOMPDF_PDFLIB_LICENSE") ) {
       $this->_pdf->create_action("JavaScript", $code);
@@ -796,7 +796,7 @@ class PDFLib_Adapter implements Canvas {
         return; // Local links are not allowed
       $url = build_url($proto, $host, $path, $file);
       $url = '{' . rawurldecode($url) . '}';
-      
+
       $action = $this->_pdf->create_action("URI", "url=" . $url);
       $this->_pdf->create_annotation($x, $y, $x + $width, $y + $height, 'Link', "contents={$url} action={activate=$action} linewidth=0");
     }
@@ -810,12 +810,12 @@ class PDFLib_Adapter implements Canvas {
     // Determine the additional width due to extra spacing
     $num_spaces = mb_substr_count($text," ");
     $delta = $word_spacing * $num_spaces;
-    
+
     if ( $letter_spacing ) {
       $num_chars = mb_strlen($text);
       $delta += ($num_chars - $num_spaces) * $letter_spacing;
     }
-    
+
     return $this->_pdf->stringwidth($text, $fh, $size) + $delta;
   }
 
@@ -833,7 +833,7 @@ class PDFLib_Adapter implements Canvas {
     // $desc is usually < 0,
     return $size * ($asc - $desc) * DOMPDF_FONT_HEIGHT_RATIO;
   }
-  
+
   function get_font_baseline($font, $size) {
     return $this->get_font_height($font, $size) / DOMPDF_FONT_HEIGHT_RATIO * 1.1;
   }

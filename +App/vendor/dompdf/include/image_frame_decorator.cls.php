@@ -23,7 +23,7 @@ class Image_Frame_Decorator extends Frame_Decorator {
    * @var string
    */
   protected $_image_url;
-  
+
   /**
    * The image's file error message
    *
@@ -39,10 +39,10 @@ class Image_Frame_Decorator extends Frame_Decorator {
    */
   function __construct(Frame $frame, DOMPDF $dompdf) {
     global $_dompdf_warnings;
-    
+
     parent::__construct($frame, $dompdf);
     $url = $frame->get_node()->getAttribute("src");
-      
+
     //debugpng
     if (DEBUGPNG) print '[__construct '.$url.']';
 
@@ -76,5 +76,5 @@ class Image_Frame_Decorator extends Frame_Decorator {
   function get_image_msg() {
     return $this->_image_msg;
   }
-  
+
 }

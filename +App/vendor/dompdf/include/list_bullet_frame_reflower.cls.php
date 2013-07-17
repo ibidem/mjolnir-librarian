@@ -16,7 +16,7 @@
 class List_Bullet_Frame_Reflower extends Frame_Reflower {
 
   function __construct(Frame_Decorator $frame) { parent::__construct($frame); }
-    
+
   //........................................................................
 
   function reflow(Frame_Decorator $block = null) {

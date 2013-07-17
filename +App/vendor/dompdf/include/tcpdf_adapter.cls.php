@@ -75,7 +75,7 @@ class TCPDF_Adapter implements Canvas {
    * @var float
    */
   private $_last_line_width;
-  
+
   /**
    * Total number of pages
    *
@@ -105,7 +105,7 @@ class TCPDF_Adapter implements Canvas {
    * @param string $orientation The orientation of the document (either 'landscape' or 'portrait')
    */
   function __construct($paper = "letter", $orientation = "portrait") {
-   
+
     if ( is_array($paper) )
       $size = $paper;
     else if ( isset(self::$PAPER_SIZES[mb_strtolower($paper)]) )
@@ -132,8 +132,8 @@ class TCPDF_Adapter implements Canvas {
       $this->_last_stroke_color =
       $this->_last_line_width   = null;
 
-  }  
-  
+  }
+
   /**
    * Remaps y coords from 4th to 1st quadrant
    *
@@ -182,7 +182,7 @@ class TCPDF_Adapter implements Canvas {
    * @return TCPDF
    */
   function get_tcpdf() { return $this->_pdf; }
-  
+
   /**
    * Returns the current page number
    *
@@ -252,7 +252,7 @@ class TCPDF_Adapter implements Canvas {
    * @param array $color
    * @param float $width
    * @param array $style
-   */   
+   */
   function rectangle($x1, $y1, $w, $h, $color, $width, $style = null) {
 
     if ( is_null($this->_last_line_width) || $width != $this->_last_line_width ) {
@@ -261,10 +261,10 @@ class TCPDF_Adapter implements Canvas {
     }
 
     $this->_set_stroke_colour($color);
-    
+
     // FIXME: ugh, need to handle styles here
     $this->_pdf->rect($x1, $y1, $w, $h);
-    
+
   }
 
   /**
@@ -277,11 +277,11 @@ class TCPDF_Adapter implements Canvas {
    * @param float $w
    * @param float $h
    * @param array $color
-   */   
+   */
   function filled_rectangle($x1, $y1, $w, $h, $color) {
 
     $this->_set_fill_colour($color);
-    
+
     // FIXME: ugh, need to handle styles here
     $this->_pdf->rect($x1, $y1, $w, $h, "F");
   }
@@ -302,7 +302,7 @@ class TCPDF_Adapter implements Canvas {
    *
    * See {@link Style::munge_colour()} for the format of the colour array.
    * See {@link Cpdf::setLineStyle()} for a description of the $style
-   * parameter (aka dash)   
+   * parameter (aka dash)
    *
    * @param array $points
    * @param array $color
@@ -327,8 +327,8 @@ class TCPDF_Adapter implements Canvas {
    * @param array $color
    * @param float $width
    * @param array $style
-   * @param bool $fill Fills the circle if true   
-   */   
+   * @param bool $fill Fills the circle if true
+   */
   function circle($x, $y, $r, $color, $width = null, $style = null, $fill = false) {
     // FIXME
   }
@@ -370,7 +370,7 @@ class TCPDF_Adapter implements Canvas {
   function javascript($code) {
     // FIXME
   }
-  
+
   /**
    * Add a named destination (similar to <a name="foo">...</a> in html)
    *
@@ -392,7 +392,7 @@ class TCPDF_Adapter implements Canvas {
   function add_link($url, $x, $y, $width, $height) {
     // FIXME
   }
-  
+
   /**
    * Add meta information to the PDF
    *
@@ -405,7 +405,7 @@ class TCPDF_Adapter implements Canvas {
       $this->_pdf->$method($value);
     }
   }
-  
+
   /**
    * Calculates text size, in points
    *
@@ -430,7 +430,7 @@ class TCPDF_Adapter implements Canvas {
     // FIXME
   }
 
-  
+
   /**
    * Starts a new page
    *
@@ -459,8 +459,8 @@ class TCPDF_Adapter implements Canvas {
   function output($options = null) {
     // FIXME
   }
-  
+
 }
-    
+
 // Workaround for idiotic limitation on statics...
 PDFLib_Adapter::$PAPER_SIZES = CPDF_Adapter::$PAPER_SIZES;

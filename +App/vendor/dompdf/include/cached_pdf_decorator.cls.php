@@ -25,12 +25,12 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
   protected $_cache_id;
   protected $_current_page_id;
   protected $_fonts;  // fonts used in this document
-  
+
   function __construct($cache_id, CPDF_Adapter $pdf) {
     $this->_pdf = $pdf;
     $this->_cache_id = $cache_id;
     $this->_fonts = array();
-    
+
     $this->_current_page_id = $this->_pdf->open_object();
   }
 
@@ -40,7 +40,7 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
 
   function open_object() { $this->_pdf->open_object(); }
   function reopen_object() { return $this->_pdf->reopen_object(); }
-  
+
   function close_object() { $this->_pdf->close_object(); }
 
   function add_object($object, $where = 'all') { $this->_pdf->add_object($object, $where); }
@@ -48,7 +48,7 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
   function serialize_object($id) { $this->_pdf->serialize_object($id); }
 
   function reopen_serialized_object($obj) { $this->_pdf->reopen_serialized_object($obj); }
-    
+
   //........................................................................
 
   function get_width() { return $this->_pdf->get_width(); }
@@ -62,15 +62,15 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
   function line($x1, $y1, $x2, $y2, $color, $width, $style = array()) {
     $this->_pdf->line($x1, $y1, $x2, $y2, $color, $width, $style);
   }
-                              
+
   function rectangle($x1, $y1, $w, $h, $color, $width, $style = array()) {
     $this->_pdf->rectangle($x1, $y1, $w, $h, $color, $width, $style);
   }
- 
+
   function filled_rectangle($x1, $y1, $w, $h, $color) {
     $this->_pdf->filled_rectangle($x1, $y1, $w, $h, $color);
   }
-    
+
   function polygon($points, $color, $width = null, $style = array(), $fill = false) {
     $this->_pdf->polygon($points, $color, $width, $style, $fill);
   }
@@ -82,34 +82,34 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
   function image($img_url, $x, $y, $w = null, $h = null) {
     $this->_pdf->image($img_url, $x, $y, $w, $h);
   }
-  
+
   function text($x, $y, $text, $font, $size, $color = array(0,0,0), $adjust = 0, $angle = 0) {
     $this->_fonts[$font] = true;
     $this->_pdf->text($x, $y, $text, $font, $size, $color, $adjust, $angle);
   }
 
   function page_text($x, $y, $text, $font, $size, $color = array(0,0,0), $adjust = 0, $angle = 0) {
-    
+
     // We want to remove this from cached pages since it may not be correct
     $this->_pdf->close_object();
     $this->_pdf->page_text($x, $y, $text, $font, $size, $color, $adjust, $angle);
     $this->_pdf->reopen_object($this->_current_page_id);
   }
-  
+
   function page_script($script, $type = 'text/php') {
-    
+
     // We want to remove this from cached pages since it may not be correct
     $this->_pdf->close_object();
     $this->_pdf->page_script($script, $type);
     $this->_pdf->reopen_object($this->_current_page_id);
   }
-  
+
   function new_page() {
     $this->_pdf->close_object();
 
     // Add the object to the current page
     $this->_pdf->add_object($this->_current_page_id, "add");
-    $this->_pdf->new_page();    
+    $this->_pdf->new_page();
 
     Page_Cache::store_page($this->_cache_id,
                            $this->_pdf->get_page_number() - 1,
@@ -118,7 +118,7 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
     $this->_current_page_id = $this->_pdf->open_object();
     return $this->_current_page_id;
   }
-  
+
   function stream($filename) {
     // Store the last page in the page cache
     if ( !is_null($this->_current_page_id) ) {
@@ -130,11 +130,11 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
       Page_Cache::store_fonts($this->_cache_id, $this->_fonts);
       $this->_current_page_id = null;
     }
-    
+
     $this->_pdf->stream($filename);
-    
+
   }
-  
+
   function &output() {
     // Store the last page in the page cache
     if ( !is_null($this->_current_page_id) ) {
@@ -145,10 +145,10 @@ class Cached_PDF_Decorator extends CPDF_Adapter implements Canvas {
                              $this->_pdf->serialize_object($this->_current_page_id));
       $this->_current_page_id = null;
     }
-    
+
     return $this->_pdf->output();
   }
-  
+
   function get_messages() { return $this->_pdf->get_messages(); }
-  
+
 }

@@ -75,7 +75,7 @@ interface Canvas {
    * @param array $color
    * @param float $width
    * @param array $style
-   */   
+   */
   function rectangle($x1, $y1, $w, $h, $color, $width, $style = null);
 
   /**
@@ -88,7 +88,7 @@ interface Canvas {
    * @param float $w
    * @param float $h
    * @param array $color
-   */   
+   */
   function filled_rectangle($x1, $y1, $w, $h, $color);
 
   /**
@@ -98,49 +98,49 @@ interface Canvas {
    * @param float $y1
    * @param float $w
    * @param float $h
-   */   
+   */
   function clipping_rectangle($x1, $y1, $w, $h);
-  
+
   /**
    * Ends the last clipping shape
-   */  
+   */
   function clipping_end();
-  
+
   /**
    * Save current state
    */
   function save();
-  
+
   /**
    * Restore last state
    */
   function restore();
-  
+
   /**
    * Rotate
    */
   function rotate($angle, $x, $y);
-  
+
   /**
    * Skew
    */
   function skew($angle_x, $angle_y, $x, $y);
-  
+
   /**
    * Scale
    */
   function scale($s_x, $s_y, $x, $y);
-  
+
   /**
    * Translate
    */
   function translate($t_x, $t_y);
-  
+
   /**
    * Transform
    */
   function transform($a, $b, $c, $d, $e, $f);
-  
+
   /**
    * Draws a polygon
    *
@@ -157,7 +157,7 @@ interface Canvas {
    *
    * See {@link Style::munge_colour()} for the format of the colour array.
    * See {@link Cpdf::setLineStyle()} for a description of the $style
-   * parameter (aka dash)   
+   * parameter (aka dash)
    *
    * @param array $points
    * @param array $color
@@ -180,8 +180,8 @@ interface Canvas {
    * @param array $color
    * @param float $width
    * @param array $style
-   * @param bool $fill Fills the circle if true   
-   */   
+   * @param bool $fill Fills the circle if true
+   */
   function circle($x, $y, $r, $color, $width = null, $style = null, $fill = false);
 
   /**
@@ -233,15 +233,15 @@ interface Canvas {
    * @param float  $height   The height of the link
    */
   function add_link($url, $x, $y, $width, $height);
-  
+
   /**
    * Add meta information to the pdf
-   * 
+   *
    * @param string $label  label of the value (Creator, Producer, etc.)
    * @param string $value  the text to set
    */
   function add_info($name, $value);
-  
+
   /**
    * Calculates text size, in points
    *
@@ -261,9 +261,9 @@ interface Canvas {
    * @return float
    */
   function get_font_height($font, $size);
-  
+
   function get_font_baseline($font, $size);
-  
+
   /**
    * Returns the font x-height, in points
    *
@@ -272,7 +272,7 @@ interface Canvas {
    * @return float
    */
   //function get_font_x_height($font, $size);
-  
+
   /**
    * Sets the opacity
    *
@@ -281,12 +281,12 @@ interface Canvas {
    * @return float
    */
   function set_opacity($opacity, $mode = "Normal");
-  
+
   /**
    * Sets the default view
    *
    * @param string $view
-   * 
+   *
    * 'XYZ'  left, top, zoom
    * 'Fit'
    * 'FitH' top
@@ -297,7 +297,7 @@ interface Canvas {
    * 'FitBV' left
    */
   function set_default_view($view, $options = array());
-  
+
   /**
    * Starts a new page
    *
@@ -320,5 +320,5 @@ interface Canvas {
    * @return string
    */
   function output($options = null);
-  
+
 }

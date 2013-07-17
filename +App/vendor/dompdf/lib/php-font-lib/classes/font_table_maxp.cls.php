@@ -9,7 +9,7 @@
 
 /**
  * `maxp` font table.
- * 
+ *
  * @package php-font-lib
  */
 class Font_Table_maxp extends Font_Table {
@@ -30,11 +30,11 @@ class Font_Table_maxp extends Font_Table {
     "maxComponentElements"  => self::uint16,
     "maxComponentDepth"     => self::uint16,
   );
-  
+
   function _encode(){
     $font = $this->getFont();
     $this->data["numGlyphs"] = count($font->getSubset());
-    
+
     return parent::_encode();
   }
 }

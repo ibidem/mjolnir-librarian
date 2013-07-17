@@ -11,15 +11,15 @@ require_once dirname(__FILE__)."/font_truetype.cls.php";
 
 /**
  * EOT font file.
- * 
+ *
  * @package php-font-lib
  */
 class Font_EOT extends Font_TrueType {
   private $origF;
   private $fileOffset = 0;
-  
+
   public $header;
-  
+
   function parseHeader(){
     $this->header = $this->unpack(array(
       "EOTSize"        => self::uint32,
@@ -27,9 +27,9 @@ class Font_EOT extends Font_TrueType {
       "Version"        => self::uint32,
       "Flags"          => self::uint32,
     ));
-    
+
     $this->header["FontPANOSE"] = $this->read(10);
-    
+
     $this->header += $this->unpack(array(
       "Charset"        => self::uint8,
       "Italic"         => self::uint8,
@@ -51,11 +51,11 @@ class Font_EOT extends Font_TrueType {
       "FamilyNameSize" => self::uint16,
     ));
   }
-  
+
   function parse() {
     exit("EOT not supported yet");
   }
-  
+
   public function readUInt16() {
     $a = unpack('vv', $this->read(2));
     return $a['v'];

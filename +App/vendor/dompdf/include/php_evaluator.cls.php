@@ -14,7 +14,7 @@
  * @package dompdf
  */
 class PHP_Evaluator {
-  
+
   /**
    * @var Canvas
    */
@@ -27,19 +27,19 @@ class PHP_Evaluator {
   function evaluate($code, $vars = array()) {
     if ( !DOMPDF_ENABLE_PHP )
       return;
-    
+
     // Set up some variables for the inline code
     $pdf = $this->_canvas;
     $PAGE_NUM = $pdf->get_page_number();
     $PAGE_COUNT = $pdf->get_page_count();
-    
+
     // Override those variables if passed in
     foreach ($vars as $k => $v) {
       $$k = $v;
     }
 
     //$code = html_entity_decode($code); // @todo uncomment this when tested
-    eval(utf8_decode($code)); 
+    eval(utf8_decode($code));
   }
 
   function render($frame) {
