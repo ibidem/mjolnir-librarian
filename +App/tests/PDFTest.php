@@ -2,7 +2,7 @@
 
 use \mjolnir\librarian\PDF;
 
-class PDFTest extends \PHPUnit_Framework_TestCase
+class PDFTest extends \app\PHPUnit_Framework_TestCase
 {
 	/** @test */ function
 	can_be_loaded()

@@ -2,7 +2,7 @@
 
 use \mjolnir\librarian\PDFDriver_Dompdf;
 
-class PDFDriver_DompdfTest extends \PHPUnit_Framework_TestCase
+class PDFDriver_DompdfTest extends \app\PHPUnit_Framework_TestCase
 {
 	/** @test */ function
 	can_be_loaded()

@@ -2,7 +2,7 @@
 
 use \mjolnir\librarian\PDFDriver_Wkhtmltopdf;
 
-class PDFDriver_WkhtmltopdfTest extends \PHPUnit_Framework_TestCase
+class PDFDriver_WkhtmltopdfTest extends \app\PHPUnit_Framework_TestCase
 {
 	/** @test */ function
 	can_be_loaded()
