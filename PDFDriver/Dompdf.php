@@ -28,10 +28,20 @@ class PDFDriver_Dompdf extends \app\Instantiatable implements \mjolnir\types\PDF
 
 	/**
 	 * Stream pdf to client.
+	 *
+	 * You may pass extra configuration, such as paper and orientation, but if
+	 * the configuration is read depends on the driver, so the configuration
+	 * should be considered along the lines of hints.
 	 */
-	function stream($html, $filename)
+	function stream($html, $filename, $hints = [])
 	{
 		$dompdf = new \DOMPDF();
+
+		if (isset($hints['paper']) && isset($hints['orientation']))
+		{
+			$dompdf->set_paper($hints['paper'], $hints['orientation']);
+		}
+
 		$dompdf->load_html($html);
 		$dompdf->render();
 		$dompdf->stream($filename, ['Attachment' => 0]);

@@ -38,8 +38,12 @@ class PDFDriver_Wkhtmltopdf extends \app\Instantiatable implements \mjolnir\type
 
 	/**
 	 * Stream to client.
+	 *
+	 * You may pass extra configuration, such as paper and orientation, but if
+	 * the configuration is read depends on the driver, so the configuration
+	 * should be considered along the lines of hints.
 	 */
-	function stream($html, $filename)
+	function stream($html, $filename, $hints = [])
 	{
 		try
 		{
